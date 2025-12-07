@@ -17,13 +17,16 @@ class ProxyServer {
 	
 			while(Boolean.TRUE) {
 				try (Socket socket = serverSocket.accept()) {
+					System.out.println("pre");
 					fromClient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 					toClient = new DataOutputStream(socket.getOutputStream());
 	
 					clientText = fromClient.readLine();
-					clientTextUpperCase = clientText.toUpperCase() + "\\n";
+					System.out.println("mid " + clientText);
+					clientTextUpperCase = clientText.toUpperCase();
 	
-					toClient.writeBytes(clientTextUpperCase);
+					toClient.writeBytes(clientTextUpperCase + System.lineSeparator());
+					System.out.println("post");
 				}
 			}
 		} catch (IOException ex) {

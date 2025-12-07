@@ -1,8 +1,7 @@
 package socket.implementations;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -10,30 +9,40 @@ import java.net.Socket;
 import game.enums.MatchState;
 import game.implementations.SimpleMatch;
 import game.interfaces.Match;
+import socket.implementations.dtos.ServerResponseDTO;
+import socket.interfaces.dtos.ClientRequest;
 
 public class HangmanServer {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ClassNotFoundException {
 		try (final ServerSocket serverSocket = new ServerSocket(7070)) {
-			BufferedReader fromClient;
+			ObjectInputStream fromClient;
 			ObjectOutputStream toClient;
 	
 			while(Boolean.TRUE) {
 				try (Socket socket = serverSocket.accept()) {
-					fromClient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+					final Match match = new SimpleMatch("testando...");
+					fromClient = new ObjectInputStream(socket.getInputStream());
 					toClient = new ObjectOutputStream(socket.getOutputStream());
+					toClient.flush();
 					
-					Match match = new SimpleMatch("testando...");
-					toClient.writeObject(match);
+					toClient.writeObject(new ServerResponseDTO(match));
 
-					String lineRead = fromClient.readLine();
+					Object request = fromClient.readObject();
+					
 					while (
 						isSocketValid(socket).equals(Boolean.TRUE) && 
-						isLineReadValid(lineRead).equals(Boolean.TRUE) &&
+						isRequestValid(request).equals(Boolean.TRUE) &&
 						isMatchValid(match).equals(Boolean.TRUE)
 					) {
-						match.hint(lineRead.charAt(0));
-						toClient.writeObject(match);
-						lineRead = fromClient.readLine();
+						final ClientRequest validRequest = (ClientRequest) request; 
+						
+						if (validRequest.c() == null)
+							break;
+						
+						match.hint(validRequest.c());
+						toClient.reset();
+						toClient.writeObject(new ServerResponseDTO(match));
+						request = fromClient.readObject();
 					}
 				}
 			}
@@ -50,10 +59,10 @@ public class HangmanServer {
 		);
 	}
 	
-	private static Boolean isLineReadValid(final String line) {
+	private static Boolean isRequestValid(final Object obj) {
 		return Boolean.valueOf(
-			line != null && 
-			line.equals("") != Boolean.TRUE
+			obj != null && 
+			(obj instanceof ClientRequest) == Boolean.TRUE
 		);
 	}
 	

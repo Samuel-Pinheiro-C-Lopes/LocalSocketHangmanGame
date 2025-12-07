@@ -1,9 +1,13 @@
 package game.implementations;
 
+import java.io.Serializable;
+
 import game.enums.MatchState;
 import game.interfaces.Match;
 
-public class SimpleMatch implements Match {
+public class SimpleMatch implements Match, Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	private final char[] hiddenPhrase;
 	private final char[] exposedPhrase;
 	private MatchState matchState;
@@ -24,8 +28,13 @@ public class SimpleMatch implements Match {
 	}
 
 	@Override
-	public char[] getCurrentState() {
+	public char[] getExposedPhrase() {
 		return this.exposedPhrase;
+	}
+	
+	@Override
+	public char[] getHiddenPhrase() {
+		return this.hiddenPhrase;
 	}
 
 	@Override
@@ -35,7 +44,7 @@ public class SimpleMatch implements Match {
 
 	@Override
 	public void hint(Character c) {
-		if (this.matchState.equals(MatchState.PLAYING) == Boolean.FALSE)
+		if (!this.matchState.equals(MatchState.PLAYING))
 			return;
 		
 		this.updateExposedPhraseBasedOnHint(c, hiddenPhrase, exposedPhrase);
@@ -52,8 +61,8 @@ public class SimpleMatch implements Match {
 		for (int i = 0; i < hiddenPhrase.length; i++) {
 			c = hiddenPhrase[i];
 			
-			if (c == ' ') hiddenPhrase[i] = ' ';
-			else hiddenPhrase[i] = '_';
+			if (c == ' ') exposedPhrase[i] = ' ';
+			else exposedPhrase[i] = '_';
 		}
 	}
 	
@@ -78,5 +87,4 @@ public class SimpleMatch implements Match {
 		if (currentCharMatches == this.charMatches)
 			this.lives -= 1;
 	}
-
 }

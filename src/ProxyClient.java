@@ -11,13 +11,14 @@ public class ProxyClient {
 	    try (Socket socketCliente = new Socket("localhost", 7070)) {
 	        final DataOutputStream toServer = new DataOutputStream(socketCliente.getOutputStream());
 	        final BufferedReader fromServer = new BufferedReader(new InputStreamReader(socketCliente.getInputStream()));
-	
+	        System.out.println("client pre");
 	        final String clientText = fromUser.readLine();
-	
-	        toServer.writeBytes(clientText + "\\n");
-	
+	        System.out.println("client mid " + clientText);
+	        toServer.writeBytes(clientText + System.lineSeparator());
+	        toServer.flush();
+	        
 	        final String serverText = fromServer.readLine();
-	
+	        System.out.println("client post " + serverText);
 	        System.out.println("Do Servidor: " + serverText);
 	    }
 	}
