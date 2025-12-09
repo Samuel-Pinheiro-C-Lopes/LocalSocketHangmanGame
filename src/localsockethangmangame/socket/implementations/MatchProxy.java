@@ -1,14 +1,16 @@
-package socket.implementations;
+package localsockethangmangame.socket.implementations;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import game.enums.MatchState;
-import game.interfaces.Match;
-import socket.implementations.dtos.ClientRequestDTO;
-import socket.interfaces.dtos.ServerResponse;
+
+import localsockethangmangame.game.enums.MatchState;
+import localsockethangmangame.game.interfaces.Match;
+import localsockethangmangame.socket.implementations.dtos.ClientRequestDTO;
+import localsockethangmangame.socket.interfaces.dtos.ClientRequest;
+import localsockethangmangame.socket.interfaces.dtos.ServerResponse;
 
 public class MatchProxy implements Match {
 	private final String host;
@@ -18,27 +20,24 @@ public class MatchProxy implements Match {
 	private Socket socket;
 	private Match match;
 	
-	public MatchProxy(String host, Integer port) throws UnknownHostException, IOException, ClassNotFoundException {
+	public MatchProxy(
+		String host, 
+		Integer port
+	) throws UnknownHostException, IOException, ClassNotFoundException {
 		this.port = Integer.valueOf(port);
 		this.host = host;
 		this.restartMatch();
 	}
 	
 	@Override
-	public char[] getExposedPhrase() {
-		return match.getExposedPhrase();
-	}
+	public char[] getExposedPhrase() { return match.getExposedPhrase(); }
 	
 	@Override
-	public char[] getHiddenPhrase() {
-		return match.getHiddenPhrase();
-	}
+	public char[] getHiddenPhrase() { return match.getHiddenPhrase(); }
 	
 	@Override
-	public MatchState getMatchState() {
-		return this.match.getMatchState();
-	}
-
+	public MatchState getMatchState() { return this.match.getMatchState(); }
+	
 	@Override
 	public void hint(Character c) {
 		try {
@@ -54,12 +53,6 @@ public class MatchProxy implements Match {
 			this.match = null;
 			e.printStackTrace();
 		}
-	}
-	
-	private void writeCharToServer(final Character c) throws IOException {
-		 final ClientRequestDTO request = new ClientRequestDTO(c);
-		 
-		 this.toServer.writeObject(request);
 	}
 	
 	private Match getMatchFromServer() throws IOException, ClassNotFoundException {		
@@ -82,8 +75,17 @@ public class MatchProxy implements Match {
 		this.match = getMatchFromServer();
 	}
 	
+	private void writeCharToServer(final Character c) throws IOException {
+		 final ClientRequest request = new ClientRequestDTO(c);
+		 
+		 this.toServer.writeObject(request);
+	}
+	
 	private void endMatch() throws IOException {
 		this.writeCharToServer(null);
 		this.socket.close();
 	}
 }
+
+
+

@@ -1,4 +1,4 @@
-package socket.interfaces.dtos;
+package localsockethangmangame.socket.interfaces.dtos;
 
 import java.io.Serializable;
 

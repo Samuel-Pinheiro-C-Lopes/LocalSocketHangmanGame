@@ -1,20 +1,18 @@
-package game.implementations;
+package localsockethangmangame.game.implementations;
 
 import java.io.Serializable;
 
-import game.enums.MatchState;
-import game.interfaces.Match;
+import localsockethangmangame.game.enums.MatchState;
+import localsockethangmangame.game.interfaces.Match;
 
 public class SimpleMatch implements Match, Serializable {
 	private static final long serialVersionUID = 1L;
-	
 	private final char[] hiddenPhrase;
 	private final char[] exposedPhrase;
 	private MatchState matchState;
 	private int maxCharMatches;
 	private int charMatches;
 	private int lives;
-	
 	
 	public SimpleMatch(String hiddenPhrase) {
 		super();
@@ -28,20 +26,11 @@ public class SimpleMatch implements Match, Serializable {
 	}
 
 	@Override
-	public char[] getExposedPhrase() {
-		return this.exposedPhrase;
-	}
-	
+	public char[] getExposedPhrase() { return this.exposedPhrase; }
 	@Override
-	public char[] getHiddenPhrase() {
-		return this.hiddenPhrase;
-	}
-
+	public char[] getHiddenPhrase() { return this.hiddenPhrase; }
 	@Override
-	public MatchState getMatchState() {
-		return this.matchState;
-	}
-
+	public MatchState getMatchState() { return this.matchState; }
 	@Override
 	public void hint(Character c) {
 		if (!this.matchState.equals(MatchState.PLAYING))
@@ -54,7 +43,6 @@ public class SimpleMatch implements Match, Serializable {
 		else if (maxCharMatches == charMatches)
 			this.matchState = MatchState.WON;
 	}
-	
 	private void prepareExposedPhrase(char[] hiddenPhrase, char[] exposedPhrase) {
 		char c;
 		
@@ -65,7 +53,6 @@ public class SimpleMatch implements Match, Serializable {
 			else exposedPhrase[i] = '_';
 		}
 	}
-	
 	private void updateExposedPhraseBasedOnHint(
 		char hint, 
 		char[] hiddenPhrase, 
@@ -88,3 +75,5 @@ public class SimpleMatch implements Match, Serializable {
 			this.lives -= 1;
 	}
 }
+
+

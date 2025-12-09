@@ -1,6 +1,6 @@
-package game.interfaces;
+package localsockethangmangame.game.interfaces;
 
-import game.enums.MatchState;
+import localsockethangmangame.game.enums.MatchState;
 
 public interface Match {
 	char[] getExposedPhrase();
@@ -8,3 +8,4 @@ public interface Match {
 	MatchState getMatchState();
 	void hint(Character c);
 }
+

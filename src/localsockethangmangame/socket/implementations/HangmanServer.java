@@ -1,4 +1,4 @@
-package socket.implementations;
+package localsockethangmangame.socket.implementations;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -6,13 +6,14 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import game.enums.MatchState;
-import game.implementations.SimpleMatch;
-import game.interfaces.Match;
-import socket.implementations.dtos.ServerResponseDTO;
-import socket.interfaces.dtos.ClientRequest;
+import localsockethangmangame.game.enums.MatchState;
+import localsockethangmangame.game.implementations.SimpleMatch;
+import localsockethangmangame.game.interfaces.Match;
+import localsockethangmangame.socket.implementations.dtos.ServerResponseDTO;
+import localsockethangmangame.socket.interfaces.dtos.ClientRequest;
 
 public class HangmanServer {
+	
 	public static void main(String[] args) throws ClassNotFoundException {
 		try (final ServerSocket serverSocket = new ServerSocket(7070)) {
 			ObjectInputStream fromClient;
@@ -72,3 +73,6 @@ public class HangmanServer {
 		);
 	}
 }
+
+
+ 

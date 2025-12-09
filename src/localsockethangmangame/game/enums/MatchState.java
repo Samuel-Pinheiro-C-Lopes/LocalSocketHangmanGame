@@ -1,7 +1,8 @@
-package game.enums;
+package localsockethangmangame.game.enums;
 
 public enum MatchState {
 	WON,
 	LOST,
 	PLAYING
 }
+

@@ -1,11 +1,12 @@
+package localsockethangmangame;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import game.enums.MatchState;
-import game.implementations.SimpleMatch;
-import game.interfaces.Match;
-import socket.implementations.MatchProxy;
+import localsockethangmangame.game.enums.MatchState;
+import localsockethangmangame.game.interfaces.Match;
+import localsockethangmangame.socket.implementations.MatchProxy;
+
 
 public class HangmanGame {
 	private static void init(final Match match) throws IOException {
@@ -33,7 +34,7 @@ public class HangmanGame {
 	}
 	
 	public static void main(String argv[]) throws Exception {
+		// init(new SimpleMatch("testando..."));
 		init(new MatchProxy("localhost", 7070));
-		// init(new SimpleMatch("teste"));
 	}
 }
